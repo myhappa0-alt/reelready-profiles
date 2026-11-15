@@ -8,10 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+<div id="progress" aria-hidden="true"></div>
 <header class="nav">
   <div class="wrap nav-in">
     <a class="logo" href="#top">REEL<span>READY</span> PROFILES</a>
@@ -31,6 +32,8 @@
   <section class="hero">
     <img class="hero-img" src="https://images.pexels.com/photos/34509021/pexels-photo-34509021.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="High school football player under stadium lights at night">
     <div class="hero-shade"></div>
+    <div class="hero-blob blob-pink" aria-hidden="true"></div>
+    <div class="hero-blob blob-light" aria-hidden="true"></div>
     <div class="wrap hero-copy">
       <p class="kicker reveal">For high school athletes &amp; parents</p>
       <h1 class="reveal">Send us your raw film.<br>Get back a <span class="grad-text">coach-ready reel</span> in 72 hours.</h1>
@@ -112,6 +115,13 @@
       <li class="reveal"><strong>Big-play timestamps, if you know them</strong> — optional, but they speed everything up.</li>
       <li class="reveal"><strong>Player info</strong> — position, class year, height / weight, GPA, key stats and measurables.</li>
       <li class="reveal"><strong>College preferences</strong> — division level, regions, majors — anything that makes the list of 20 right-fit.</li>
+    </ul>
+    <h3 class="reveal after-check-h">How to send your film</h3>
+    <ul class="included-list after-check">
+      <li class="reveal"><strong>On Hudl?</strong> Open the game or highlight, tap Share, copy the link, and paste it into the order form. That's the easiest way — nothing to upload.</li>
+      <li class="reveal"><strong>Film on your phone?</strong> In Google Photos or iCloud Photos, select the game videos, tap Share, choose "Create link" (or "Copy iCloud Link"), and paste that link into the form. Set sharing to "anyone with the link" so we can open it.</li>
+      <li class="reveal"><strong>No link option?</strong> Go to wetransfer.com — it's free, no account, up to 2 GB. Upload the videos, choose "Get a link," and paste the link into the form. Send it the same day you pay: those links expire in a few days, and we download your film the day it arrives.</li>
+      <li class="reveal"><strong>Never email video files</strong> — they're too big and usually fail. A link always works.</li>
     </ul>
   </section>
 
@@ -225,6 +235,49 @@
       }
     }, {passive:true});
   }
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  /* Desktop: mouse parallax in the hero (blobs + photo drift with the cursor) */
+  var hero = document.querySelector('.hero');
+  var blobPink = document.querySelector('.blob-pink');
+  var blobLight = document.querySelector('.blob-light');
+  if(hero && fine && !reduce){
+    hero.addEventListener('mousemove', function(e){
+      var r = hero.getBoundingClientRect();
+      var dx = (e.clientX - r.left)/r.width - .5;
+      var dy = (e.clientY - r.top)/r.height - .5;
+      if(blobPink) blobPink.style.translate = (dx*-34) + 'px ' + (dy*-22) + 'px';
+      if(blobLight) blobLight.style.translate = (dx*26) + 'px ' + (dy*18) + 'px';
+      if(heroImg) heroImg.style.marginLeft = (dx*-10) + 'px';
+    });
+    hero.addEventListener('mouseleave', function(){
+      if(blobPink) blobPink.style.translate = '';
+      if(blobLight) blobLight.style.translate = '';
+      if(heroImg) heroImg.style.marginLeft = '';
+    });
+  }
+  /* Desktop: subtle 3D tilt on cards and the price box */
+  if(fine && !reduce){
+    document.querySelectorAll('.card, .price-box').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var rx = ((e.clientY - r.top)/r.height - .5) * -5;
+        var ry = ((e.clientX - r.left)/r.width - .5) * 5;
+        el.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-5px)';
+      });
+      el.addEventListener('mouseleave', function(){ el.style.transform = ''; });
+    });
+  }
+  /* Nav shadow + reading progress once you scroll */
+  var nav = document.querySelector('.nav');
+  var prog = document.getElementById('progress');
+  window.addEventListener('scroll', function(){
+    if(nav) nav.classList.toggle('scrolled', window.scrollY > 12);
+    if(prog){
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      prog.style.transform = 'scaleX(' + (max > 0 ? window.scrollY/max : 0) + ')';
+    }
+  }, {passive:true});
 })();
 </script>
 </body>
