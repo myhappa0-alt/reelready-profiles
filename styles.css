@@ -1,33 +1,50 @@
-/* ReelReady Profiles — v2 design
-   Palette: deep midnight navy + clean white + royal blue -> signal orange gradient.
-   The old neon-lime is gone. Motion: slow hero zoom, scroll fade-up reveals,
-   hover lift/zoom on cards, animated ticker, smooth button transitions. */
+/* ReelReady Profiles — v3 design
+   Built from William's references (2026-11-15):
+   - @niki.aroca: calm base palette + ONE accent color that catches you off guard
+     -> deep navy/royal blue base, signal orange is the only accent.
+   - @marcelodesignxh: palette as a deliberate system -> design tokens below.
+   - @thechriscordero stack (Framer Motion feel, premium components):
+     -> buttery cubic-bezier motion, staggered reveals, count-up stats,
+        animated gradient-border pricing card, glass nav, shine-sweep buttons.
+   Static CSS/JS equivalents — no framework needed on GitHub Pages. */
 :root{
+  /* Palette system (the swatch row: navy, ink, royal blue, ice, orange) */
   --bg:#050a14; --bg2:#081120;
   --panel:#0c1728; --panel2:#091426;
-  --text:#f5f7fa; --muted:#9fb0c6;
+  --text:#f5f7fa; --muted:#9fb0c6; --ice:#8fc1ff;
   --blue:#2d7dff; --orange:#ff5c1c;
   --grad:linear-gradient(120deg,#2d7dff 0%,#7a5cff 55%,#ff5c1c 110%);
   --line:rgba(159,176,198,.16);
   --radius:18px;
   --shadow:0 18px 40px rgba(0,0,0,.35);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --font-display:"Archivo","Inter",system-ui,sans-serif;
 }
+@property --angle{syntax:"<angle>";initial-value:0deg;inherits:false}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+::selection{background:var(--orange);color:#fff}
 img{max-width:100%;display:block}
-a{color:#8fc1ff}
+a{color:var(--ice)}
+a:focus-visible,.btn:focus-visible,summary:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+h1,h2{font-family:var(--font-display)}
 h1{font-size:clamp(2.1rem,5.4vw,3.8rem);line-height:1.03;margin:.35em 0;text-transform:uppercase;letter-spacing:.01em;font-weight:900}
-h2{font-size:clamp(1.55rem,3.4vw,2.25rem);text-transform:uppercase;margin:.2em 0 .7em;font-weight:850;letter-spacing:.01em}
+h2{font-size:clamp(1.55rem,3.4vw,2.25rem);text-transform:uppercase;margin:.2em 0 .7em;font-weight:800;letter-spacing:.01em}
 h3{margin:.45em 0 .2em}
+.grad-text{background:linear-gradient(100deg,#2d7dff,#7a5cff,#ff5c1c,#7a5cff,#2d7dff);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradShift 7s ease-in-out infinite}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .kicker{color:#ffb59d;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:.78rem;margin:0}
 .kicker.on-dark{color:#ffd9c9}
 
-/* Buttons */
-.btn{display:inline-block;background:var(--orange);color:#fff;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:999px;box-shadow:0 10px 26px rgba(255,92,28,.32);transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
-.btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(255,92,28,.42);background:#ff6c33}
-.btn:active{transform:translateY(0)}
+/* Buttons — shine sweep on hover */
+.btn{position:relative;overflow:hidden;display:inline-block;background:var(--orange);color:#fff;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:999px;box-shadow:0 10px 26px rgba(255,92,28,.32);transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .3s ease}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--ease)}
+.btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 16px 34px rgba(255,92,28,.45);background:#ff6c33}
+.btn:hover::after{transform:translateX(120%)}
+.btn:active{transform:translateY(0) scale(.99)}
 .btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1.5px solid rgba(255,255,255,.55);box-shadow:none;backdrop-filter:blur(4px)}
 .btn-ghost:hover{background:rgba(255,255,255,.14);box-shadow:none}
 .btn-small{padding:9px 17px}
@@ -35,10 +52,10 @@ h3{margin:.45em 0 .2em}
 .fineprint{color:var(--muted);font-size:.82rem;margin-top:18px}
 .on-dark-fine{color:rgba(255,255,255,.75)}
 
-/* Nav */
-.nav{position:sticky;top:0;z-index:30;background:rgba(5,10,20,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:box-shadow .3s ease}
+/* Nav — glass */
+.nav{position:sticky;top:0;z-index:30;background:rgba(5,10,20,.78);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid var(--line)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:13px;padding-bottom:13px}
-.logo{color:var(--text);text-decoration:none;font-weight:900;letter-spacing:.07em}
+.logo{color:var(--text);text-decoration:none;font-weight:900;letter-spacing:.07em;font-family:var(--font-display)}
 .logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .nav nav{display:flex;align-items:center;gap:19px;flex-wrap:wrap}
 .nav nav a{color:var(--text);text-decoration:none;font-weight:600;transition:color .2s ease}
@@ -47,26 +64,37 @@ h3{margin:.45em 0 .2em}
 .nav nav a.btn:hover{color:#fff}
 
 /* Hero */
-.hero{position:relative;min-height:82vh;display:flex;align-items:flex-end;overflow:hidden;background:var(--bg2)}
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:heroZoom 22s ease-in-out infinite alternate}
+.hero{position:relative;min-height:86vh;display:flex;align-items:flex-end;overflow:hidden;background:var(--bg2)}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:heroZoom 22s ease-in-out infinite alternate;will-change:transform,translate}
 @keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.09)}}
-.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,10,20,.38) 0%,rgba(5,10,20,.55) 45%,rgba(5,10,20,.96) 88%),linear-gradient(100deg,rgba(45,125,255,.20),rgba(255,92,28,.12) 75%,transparent)}
+.hero-shade{position:absolute;inset:0;background:radial-gradient(600px 300px at 85% 20%,rgba(255,92,28,.20),transparent 65%),radial-gradient(700px 380px at 10% 30%,rgba(45,125,255,.22),transparent 65%),linear-gradient(180deg,rgba(5,10,20,.38) 0%,rgba(5,10,20,.55) 45%,rgba(5,10,20,.96) 88%)}
 .hero-copy{position:relative;padding-top:130px;padding-bottom:52px;width:100%}
 .sub{font-size:clamp(1.05rem,2.4vw,1.35rem);color:#cdd9e8;margin:0 0 24px}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
 .hero-points{display:flex;gap:10px 24px;flex-wrap:wrap;list-style:none;padding:0;margin:24px 0 0;font-weight:700}
 .hero-points li::before{content:"✓ ";color:var(--orange)}
+.hero-stats{display:flex;gap:0;flex-wrap:wrap;margin-top:30px;background:rgba(12,23,40,.55);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);overflow:hidden;max-width:720px}
+.stat{flex:1 1 140px;padding:16px 18px;display:flex;flex-direction:column;gap:1px}
+.stat + .stat{border-left:1px solid var(--line)}
+.stat strong{font-family:var(--font-display);font-size:1.65rem;font-weight:900;line-height:1.1}
+.stat-label{color:var(--muted);font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 
 /* Ticker */
 .ticker{overflow:hidden;background:#04070f;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:11px 0}
 .ticker-track{display:flex;width:max-content;animation:tickerMove 30s linear infinite;color:#7f93ad;font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;white-space:nowrap}
+.ticker:hover .ticker-track{animation-play-state:paused}
 @keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* Reveal on scroll (only hidden when JS is on, so no-JS still shows everything) */
-.js .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+/* Reveal on scroll — Framer-style: fade + rise + settle, staggered by position */
+.js .reveal{opacity:0;transform:translateY(26px) scale(.985);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
 .js .reveal.in{opacity:1;transform:none}
+.cards .card:nth-child(2),.steps .step:nth-child(2){--d:.12s}
+.cards .card:nth-child(3),.steps .step:nth-child(3){--d:.24s}
+.included-list li:nth-child(2){--d:.06s}.included-list li:nth-child(3){--d:.12s}
+.included-list li:nth-child(4){--d:.18s}.included-list li:nth-child(5){--d:.24s}
+.included-list li:nth-child(6){--d:.30s}.included-list li:nth-child(7){--d:.36s}
 @media (prefers-reduced-motion: reduce){
-  .hero-img,.ticker-track{animation:none}
+  .hero-img,.ticker-track,.grad-text{animation:none}
   .js .reveal{opacity:1;transform:none;transition:none}
   html{scroll-behavior:auto}
 }
@@ -75,27 +103,35 @@ h3{margin:.45em 0 .2em}
 section{padding:58px 0}
 .band{background:linear-gradient(180deg,var(--panel2),#060d1a);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
-.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(255,92,28,.45)}
-.card img{height:235px;width:100%;object-fit:cover;transition:transform .5s ease}
-.card:hover img{transform:scale(1.06)}
+.card{position:relative;margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .3s ease}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);opacity:0;transition:opacity .3s ease;z-index:2}
+.card:hover{transform:translateY(-7px);box-shadow:var(--shadow);border-color:rgba(255,92,28,.45)}
+.card:hover::before{opacity:1}
+.card img{height:235px;width:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.card:hover img{transform:scale(1.07)}
 .card figcaption{padding:17px;display:flex;flex-direction:column;gap:2px}
 .card figcaption strong{font-size:1.05rem}
 .card figcaption span{color:var(--muted);font-size:.92rem}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:transform .3s ease,box-shadow .3s ease}
+.steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (min-width:821px){
+  .steps::before{content:"";position:absolute;top:44px;left:16%;right:16%;border-top:2px dashed rgba(143,193,255,.25);z-index:0}
+  .step{position:relative;z-index:1}
+}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
 .step:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
 .step p{color:var(--muted);margin:.3em 0 0}
 .num{display:inline-flex;width:40px;height:40px;border-radius:50%;background:var(--grad);color:#fff;font-weight:900;align-items:center;justify-content:center;font-size:1.12rem;box-shadow:0 8px 20px rgba(45,125,255,.35)}
 
-/* Included */
+/* Included — pricing card with animated gradient border */
 .included{display:grid;grid-template-columns:1fr 1.35fr;gap:26px;align-items:start}
-.price-box{background:linear-gradient(150deg,#12305e 0%,#0a1a33 55%,#1c0f08 130%);color:#fff;border:1px solid rgba(143,193,255,.25);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
-.price-box h2{font-size:2.7rem;margin:.1em 0;background:none}
+.price-box{position:relative;background:linear-gradient(150deg,#12305e 0%,#0a1a33 55%,#1c0f08 130%);color:#fff;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);border:1px solid transparent;background-clip:padding-box}
+.price-box::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--angle),#2d7dff,#7a5cff,#ff5c1c,#2d7dff);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spinBorder 5s linear infinite;pointer-events:none}
+@keyframes spinBorder{to{--angle:360deg}}
+.price-box h2{font-size:2.7rem;margin:.1em 0}
 .price-box h2 span{font-size:1rem;text-transform:none;letter-spacing:0;color:#cdd9e8;font-weight:600}
 .included-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.included-list li{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 17px;transition:transform .25s ease,border-color .25s ease}
-.included-list li:hover{transform:translateX(5px);border-color:rgba(45,125,255,.5)}
+.included-list li{background:var(--panel);border:1px solid var(--line);border-left:3px solid transparent;border-radius:13px;padding:15px 17px;transition:transform .35s var(--ease),border-color .3s ease}
+.included-list li:hover{transform:translateX(5px);border-color:rgba(45,125,255,.5);border-left-color:var(--orange)}
 .included-list li::before{content:"✓ ";color:var(--orange);font-weight:900}
 
 /* Example */
@@ -110,7 +146,7 @@ section{padding:58px 0}
 .faq details p{color:var(--muted);margin:.6em 0 0}
 
 /* Final + footer */
-.final{text-align:center;background:linear-gradient(160deg,#0a1a33,#050a14 65%);border-top:1px solid var(--line)}
+.final{text-align:center;background:radial-gradient(700px 320px at 50% 0%,rgba(45,125,255,.16),transparent 65%),linear-gradient(160deg,#0a1a33,#050a14 65%);border-top:1px solid var(--line)}
 .final p{color:var(--muted)}
 footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:.85rem;background:#04070f}
 .foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
@@ -119,4 +155,5 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-s
   .cards,.steps,.included,.example{grid-template-columns:1fr}
   .nav nav a:not(.btn){display:none}
   .hero{min-height:72vh}
+  .stat + .stat{border-left:none}
 }

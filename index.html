@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReelReady Profiles — Send us your raw film. Get back a coach-ready reel in 72 hours.</title>
 <meta name="description" content="ReelReady Profiles: $149 one-time. Send raw film, get a 60–90 sec coach-ready highlight reel, recruiting profile, 20 right-fit colleges with coach contacts, coach send kit, and 3 vertical clips in 72 hours. No subscription. No sales call. No scholarship guarantee.">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=3">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -29,7 +32,7 @@
     <div class="hero-shade"></div>
     <div class="wrap hero-copy">
       <p class="kicker reveal">For high school athletes &amp; parents</p>
-      <h1 class="reveal">Send us your raw film.<br>Get back a coach-ready reel in 72 hours.</h1>
+      <h1 class="reveal">Send us your raw film.<br>Get back a <span class="grad-text">coach-ready reel</span> in 72 hours.</h1>
       <p class="sub reveal">One flat price. No subscription. No sales call.</p>
       <div class="hero-cta reveal">
         <a class="btn" href="https://reelready-profiles.foundable.app/">Get your $149 package</a>
@@ -40,6 +43,12 @@
         <li>72-hour delivery</li>
         <li>No scholarship guarantee — honest work, done right</li>
       </ul>
+      <div class="hero-stats reveal">
+        <div class="stat"><strong><span data-count="72">72</span></strong><span class="stat-label">hour delivery</span></div>
+        <div class="stat"><strong><span data-count="20">20</span></strong><span class="stat-label">right-fit colleges</span></div>
+        <div class="stat"><strong><span data-count="3">3</span></strong><span class="stat-label">vertical clips</span></div>
+        <div class="stat"><strong>$<span data-count="149">149</span></strong><span class="stat-label">one-time, flat</span></div>
+      </div>
       <p class="fineprint reveal">Photos on this draft are licensed stock from Pexels — example imagery, not ReelReady customers.</p>
     </div>
   </section>
@@ -145,12 +154,52 @@
 
 <script>
 (function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Scroll reveals with stagger (delay comes from --d set in CSS per position) */
   var els = document.querySelectorAll('.reveal');
-  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in')}); return; }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, {threshold: 0.12});
-  els.forEach(function(e){ io.observe(e); });
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in')}); }
+  else{
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, {threshold: 0.12});
+    els.forEach(function(e){ io.observe(e); });
+  }
+  /* Count-up stats */
+  var nums = document.querySelectorAll('[data-count]');
+  function countUp(el){
+    var target = parseInt(el.getAttribute('data-count'),10);
+    if(reduce){ el.textContent = target; return; }
+    var start = null, dur = 1100;
+    function tick(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts-start)/dur, 1);
+      var eased = 1 - Math.pow(1-p, 4);
+      el.textContent = Math.round(target * eased);
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if('IntersectionObserver' in window && nums.length){
+    var io2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ countUp(en.target); io2.unobserve(en.target); } });
+    }, {threshold: 0.4});
+    nums.forEach(function(n){ io2.observe(n); });
+  }
+  /* Gentle hero parallax */
+  var heroImg = document.querySelector('.hero-img');
+  if(heroImg && !reduce){
+    var ticking = false;
+    window.addEventListener('scroll', function(){
+      if(!ticking){
+        requestAnimationFrame(function(){
+          var y = window.scrollY;
+          if(y < window.innerHeight) heroImg.style.translate = '0 ' + (y*0.18) + 'px';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, {passive:true});
+  }
 })();
 </script>
 </body>
