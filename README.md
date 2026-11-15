@@ -15,6 +15,9 @@ Redesigned at William's request: neon-lime palette replaced with deep midnight n
 ## Design v3 (2026-11-15)
 Built from William's three reference reels: one-accent palette as a token system (@niki.aroca), palette as a deliberate system (@marcelodesignxh), Framer-Motion-style motion + premium components (@thechriscordero). Archivo/Inter type, buttery cubic-bezier staggered reveals, animated gradient headline, count-up hero stats, glass nav, shine-sweep buttons, animated conic gradient-border pricing card, hero parallax + glow. Copy, price, and order links unchanged. (Bio link switched to this site 2026-11-15 after v2 approval; ordering still routes to Foundable.)
 
+## Design v5 (2026-11-15)
+William sent a screenshot of the @niki.aroca reel and said do THESE colors: Sky Blue #0593C6 + White #FCFFFF base, Hot Pink #D83995 as the single accent (the reel's first combo, like its Pelmatech mockup). Light theme: white sections, sky-blue hero wash over the photo with an animated pink blur glow, pink CTAs. Desktop got extra time: hero mouse parallax, 3D card tilt, animated nav underlines, shrinking nav + scroll progress bar. v4 content (After you submit, checklist, FAQs) and all copy/price/order links preserved. Contrast checked (body text 6.2–14.1:1).
+
 ## Files
 - `index.html` — the page (includes a small scroll-reveal script at the bottom)
 - `styles.css` — all styling, no build step
