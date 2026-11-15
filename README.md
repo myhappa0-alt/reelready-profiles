@@ -6,7 +6,7 @@ Draft one-page website for ReelReady Profiles, built 2026-11-15 as an escape hat
 
 ## Status
 - DRAFT only. The current live site and order form remain at https://reelready-profiles.foundable.app/ — all "Get your $149 package" buttons on this draft point there.
-- Photos are licensed Pexels stock (credited in the footer), labelled on-page as example imagery, not customers.
+- Photos are licensed Pexels stock (credited in the footer), labelled on-page as example imagery, not customers. Current set (swapped 2026-11-15 to bright daylight shots that fit the blue/white scheme): hero 209822 (Pixabay), football card 163226 (Pixabay), basketball card 2820906 (Wallace Chuck), soccer card 29719233 (Franco Monsalvo), example frame 32179164 (Franco Monsalvo).
 - No payment processing, no domain, and nothing was bought to build this.
 
 ## Design v2 (2026-11-15)
