@@ -9,9 +9,12 @@ Draft one-page website for ReelReady Profiles, built 2026-11-15 as an escape hat
 - Photos are licensed Pexels stock (credited in the footer), labelled on-page as example imagery, not customers.
 - No payment processing, no domain, and nothing was bought to build this.
 
+## Design v2 (2026-11-15)
+Redesigned at William's request: neon-lime palette replaced with deep midnight navy + royal-blue-to-orange gradient accents, plus motion — slow hero zoom, scroll fade-up reveals, card hover lift/zoom, and an animated ticker strip. Copy, price, and order links unchanged. Pages serves from the `gh-pages` branch, so updates must be pushed to both `main` and `gh-pages`.
+
 ## Files
-- `index.html` — the page
-- `styles.css` — all styling, no build step, no JavaScript required
+- `index.html` — the page (includes a small scroll-reveal script at the bottom)
+- `styles.css` — all styling, no build step
 
 ## Publish with GitHub Pages
 Repo Settings → Pages → Deploy from branch → `main` / root. The site will be at `https://myhappa0-alt.github.io/reelready-profiles/`.
