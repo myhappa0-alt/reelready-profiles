@@ -4,4 +4,12 @@
     <loc>https://myhappa0-alt.github.io/reelready-profiles/</loc>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://myhappa0-alt.github.io/reelready-profiles/privacy.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://myhappa0-alt.github.io/reelready-profiles/terms.html</loc>
+    <changefreq>yearly</changefreq>
+  </url>
 </urlset>
